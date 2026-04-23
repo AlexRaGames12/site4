@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор отзывов | Адванта-М Сибирь</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #059669 0%, #1e3a8a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #059669 0%, #1e3a8a 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1e293b;
+        }
+        .logo-text small {
+            font-size: 12px;
+            color: #059669;
+            display: block;
+        }
+        .company-name {
+            text-align: right;
+        }
+        .company-name .name {
+            font-weight: 700;
+            color: #059669;
+            font-size: 16px;
+        }
+        .company-name .desc {
+            font-size: 11px;
+            color: #64748b;
+        }
+        h1 { color: #059669; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #64748b; margin-bottom: 30px; font-size: 16px; }
+        .time-badge {
+            background: #a7f3d0;
+            color: #047857;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .stars-section {
+            background: #fefce8;
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border: 1px solid #fde047;
+        }
+        .stars-title {
+            font-weight: 600;
+            color: #854d0e;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .stars {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .star {
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #cbd5e1;
+        }
+        .star.active {
+            color: #fbbf24;
+        }
+        .star:hover {
+            transform: scale(1.1);
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .tab.active {
+            background: #059669;
+            color: white;
+        }
+        .tab.negative.active {
+            background: #dc2626;
+            color: white;
+        }
+        .manual-section {
+            background: #f0fdf4;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #059669;
+        }
+        .manual-title {
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #059669;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f0fdf4;
+            border-radius: 16px;
+        }
+        .question-text { font-weight: 600; color: #1e293b; margin-bottom: 12px; font-size: 18px; }
+        .options { display: flex; flex-wrap: wrap; gap: 10px; }
+        .option input[type="radio"] { display: none; }
+        .option label {
+            padding: 8px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .option input[type="radio"]:checked + label {
+            background: #059669;
+            border-color: #059669;
+            color: white;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #059669 0%, #1e3a8a 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover { transform: scale(1.02); opacity: 0.9; }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #059669;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .options { flex-direction: column; }
+            .header { flex-direction: column; text-align: center; }
+            .company-name { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo-area">
+                    <div class="logo-icon">🏗️</div>
+                    <div class="logo-text">
+                        Адванта-М<br>
+                        <small>Сибирь</small>
+                    </div>
+                </div>
+                <div class="company-name">
+                    <div class="name">ООО «Адванта-М Сибирь»</div>
+                    <div class="desc">складская · строительная · грузоподъёмная техника</div>
+                </div>
+            </div>
+            
+            <span class="time-badge">⏱ 1–2 минуты</span>
+            <h1>📝 Расскажите о покупке</h1>
+            <p class="subtitle">Выберите тип отзыва или напишите сами</p>
+            
+            <div class="stars-section">
+                <div class="stars-title">⭐ Ваша оценка:</div>
+                <div class="stars" id="starsContainer">
+                    <span class="star" data-value="1">☆</span>
+                    <span class="star" data-value="2">☆</span>
+                    <span class="star" data-value="3">☆</span>
+                    <span class="star" data-value="4">☆</span>
+                    <span class="star" data-value="5">☆</span>
+                </div>
+                <input type="hidden" id="starsValue" value="5">
+            </div>
+            
+            <div class="tabs" id="tabs">
+                <div class="tab positive active" data-type="positive">👍 Хороший отзыв</div>
+                <div class="tab negative" data-type="negative">👎 Плохой отзыв</div>
+                <div class="tab" data-type="manual">✍️ Написать самому</div>
+            </div>
+            
+            <form id="constructorForm" action="/generate" method="POST" style="display: block;">
+                <input type="hidden" name="review_type" id="review_type" value="positive">
+                <input type="hidden" name="stars" id="hiddenStars" value="5">
+                <div id="dynamicQuestions"></div>
+                <button type="submit" id="submitBtn">✨ Собрать отзыв →</button>
+            </form>
+            
+            <form id="manualForm" action="/generate" method="POST" style="display: none;">
+                <input type="hidden" name="review_type" value="manual">
+                <input type="hidden" name="stars" id="manualHiddenStars" value="5">
+                <div class="manual-section">
+                    <div class="manual-title">✍️ Напишите свой отзыв</div>
+                    <textarea name="manual_review" rows="5" placeholder="Например: Купил погрузчик, очень доволен! Работает без нареканий..." required></textarea>
+                    <button type="submit" style="background: #059669;">📤 Отправить отзыв →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // ========== ЗВЁЗДЫ ==========
+        let currentStars = 5;
+        const stars = document.querySelectorAll('.star');
+        const hiddenStars = document.getElementById('hiddenStars');
+        const manualHiddenStars = document.getElementById('manualHiddenStars');
+        
+        function updateStars(value) {
+            currentStars = value;
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.innerHTML = '★';
+                    star.classList.add('active');
+                } else {
+                    star.innerHTML = '☆';
+                    star.classList.remove('active');
+                }
+            });
+            hiddenStars.value = value;
+            if (manualHiddenStars) manualHiddenStars.value = value;
+        }
+        
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                updateStars(parseInt(star.dataset.value));
+            });
+        });
+        updateStars(5);
+        
+        // ========== ТЕХНИКА И ДИНАМИЧЕСКИЕ ВОПРОСЫ ==========
+        const techOptions = [
+            "гидравлическую тележку", "самоходную тележку", "штабелёр", "ричтрак",
+            "подъёмный стол", "комплектовщик заказов", "ручную тележку",
+            "строительную люльку", "строительный подъёмник", "виброплиту",
+            "вибротрамбовку", "виброрейку", "колесо/опору", "таль",
+            "лебёдку", "домкрат", "монтажный блок", "такелажную тележку",
+            "гидравлический кран", "козловой кран", "крановые весы",
+            "пульт управления", "стропу"
+        ];
+        
+        const dynamicDiv = document.getElementById('dynamicQuestions');
+        
+        // Функция для создания вопроса о выборе техники
+        function buildTechQuestion(selectedTech = null) {
+            let html = `<div class="question">
+                <div class="question-text">Какую технику купили?</div>
+                <div class="options">`;
+            techOptions.forEach(opt => {
+                let id = "tech_" + opt.replace(/[ /]/g, '_');
+                let checked = (selectedTech === opt) ? 'checked' : '';
+                html += `<div class="option">
+                    <input type="radio" name="tech" value="${opt}" id="${id}" ${checked} required>
+                    <label for="${id}">${opt}</label>
+                </div>`;
+            });
+            html += `</div></div>`;
+            return html;
+        }
+        
+        // Функция для загрузки специфических вопросов
+        async function loadSpecQuestions(tech) {
+            dynamicDiv.innerHTML = `<div class="loading">⏳ Загрузка вопросов...</div>`;
+            
+            try {
+                const response = await fetch('/get_spec_questions', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({tech: tech})
+                });
+                const data = await response.json();
+                
+                let html = buildTechQuestion(tech);
+                
+                // Добавляем спецвопросы
+                if (data.spec_questions) {
+                    data.spec_questions.forEach(q => {
+                        html += `<div class="question">
+                            <div class="question-text">${q.text}</div>
+                            <div class="options">`;
+                        q.options.forEach(opt => {
+                            let id = q.id + "_" + opt.replace(/[ /]/g, '_');
+                            html += `<div class="option">
+                                <input type="radio" name="${q.id}" value="${opt}" id="${id}" required>
+                                <label for="${id}">${opt}</label>
+                            </div>`;
+                        });
+                        html += `</div></div>`;
+                    });
+                }
+                
+                // Добавляем допвопросы
+                if (data.extra_questions) {
+                    data.extra_questions.forEach(q => {
+                        html += `<div class="question">
+                            <div class="question-text">${q.text}</div>
+                            <div class="options">`;
+                        q.options.forEach(opt => {
+                            let id = q.id + "_" + opt.replace(/[ /]/g, '_');
+                            html += `<div class="option">
+                                <input type="radio" name="${q.id}" value="${opt}" id="${id}" required>
+                                <label for="${id}">${opt}</label>
+                            </div>`;
+                        });
+                        html += `</div></div>`;
+                    });
+                }
+                
+                dynamicDiv.innerHTML = html;
+                
+                // ПРИВЯЗЫВАЕМ ОБРАБОТЧИК ЗАНОВО!
+                attachTechRadioHandlers();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                dynamicDiv.innerHTML = buildTechQuestion(tech);
+                attachTechRadioHandlers();
+            }
+        }
+        
+        // Функция для привязки обработчиков к радио-кнопкам техники
+        function attachTechRadioHandlers() {
+            const techRadios = document.querySelectorAll('input[name="tech"]');
+            techRadios.forEach(radio => {
+                // Убираем старые обработчики, чтобы не было дублей
+                radio.removeEventListener('change', radio._listener);
+                // Создаём новый обработчик
+                const handler = function() {
+                    if (this.checked) {
+                        loadSpecQuestions(this.value);
+                    }
+                };
+                radio.addEventListener('change', handler);
+                radio._listener = handler; // Сохраняем ссылку для возможного удаления
+            });
+        }
+        
+        // Инициализация: создаём начальный вопрос о технике
+        dynamicDiv.innerHTML = buildTechQuestion();
+        attachTechRadioHandlers();
+        
+        // ========== ТАБЫ ==========
+        const tabs = document.querySelectorAll('.tab');
+        const constructorForm = document.getElementById('constructorForm');
+        const manualForm = document.getElementById('manualForm');
+        const reviewTypeInput = document.getElementById('review_type');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const type = tab.dataset.type;
+                
+                if (type === 'manual') {
+                    constructorForm.style.display = 'none';
+                    manualForm.style.display = 'block';
+                } else {
+                    constructorForm.style.display = 'block';
+                    manualForm.style.display = 'none';
+                    reviewTypeInput.value = type;
+                    
+                    if (type === 'negative') {
+                        submitBtn.style.background = "linear-gradient(135deg, #dc2626 0%, #991b1b 100%)";
+                        submitBtn.innerHTML = "😡 Собрать негативный отзыв →";
+                    } else {
+                        submitBtn.style.background = "linear-gradient(135deg, #059669 0%, #1e3a8a 100%)";
+                        submitBtn.innerHTML = "✨ Собрать отзыв →";
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
